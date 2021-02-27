@@ -1,0 +1,26 @@
+<table class="uk-table uk-table-justify uk-table-divider">
+    <thead>
+        <tr>
+            <th>filename</th>
+            <th>filepath</th>
+            <th>status</th>
+            <th>send duttons</th>
+            
+        </tr>
+    </thead>
+    <tbody *ngFor = "let item of userfile">
+        <tr>
+            <td>{{item.fileName}}</td>
+            <td>{{item.filePath}}</td>
+            <td>{{item.status}}</td>
+            <td><button (click)="onClickMe(item)" class="uk-button uk-button-default" type="button">Button</button></td>
+       
+            
+           
+        </tr>
+    </tbody>
+</table>
+<input type="file" (change)="onFileSelected($event)">
+<button class="uk-button uk-button-default"(click)="loadGoogleDrive()" type="button"> G-Drive</button>
+
+           

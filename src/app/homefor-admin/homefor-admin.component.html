@@ -1,0 +1,19 @@
+<table class="uk-table uk-table-small uk-table-divider">
+    <thead>
+        <tr>
+            <th>user name</th>
+            <th>file path</th>
+            <th>file name</th>
+            <th>status</th>
+        </tr>
+    </thead>
+    <tbody *ngFor = "let item of userfile">
+        <tr>
+            <td>{{item.user.name}}</td>
+            <td>{{item.filePath}}</td>
+            <td>{{item.fileName}}</td>
+            <td>{{item.status}}</td>
+           
+        </tr>
+    </tbody>
+</table>
