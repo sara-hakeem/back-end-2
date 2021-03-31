@@ -1,7 +1,7 @@
 export interface UserModel{
         id:string,
         name: string,
-        password: string,
         phone: string,
+        password: string,
         role:number
 }

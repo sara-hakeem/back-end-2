@@ -9,5 +9,5 @@ export interface UserFileModel{
         user: UserModel,
         date: string,
         status: string
-      
+     
 }

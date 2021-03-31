@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Dropbox } from 'dropbox';
-import { resonpnse } from '../login/login.component';
+import { Dropbox, users } from 'dropbox';
+import { CookieService } from 'ngx-cookie-service';
 import { UserFileModel } from '../model/UserFile';
 import { UserModel } from '../model/UserModel';
 
@@ -15,7 +15,8 @@ declare var google: any;
   styleUrls: ['./homefor-user.component.scss']
 })
 export class HomeforUserComponent implements OnInit {
-
+  user!:resonpnse;
+  message:any;
 
   selectedFile:any;
 
@@ -26,9 +27,9 @@ export class HomeforUserComponent implements OnInit {
  const fd = new FormData();
 
  fd.append('file', this.selectedFile,this.selectedFile.name);
- this.http.post('https://localhost:44339/api/UserFile/UploadFiles?id='+this.user.data.id+'+&filename='+this.selectedFile.name,fd).
+ this.http.post('https://localhost:44339/api/UserFile/UploadFiles?id='+this.cookie.get('id')+'+&filename='+this.selectedFile.name,fd).
  subscribe(res => {
-
+  this.load();
  });
   }
  // developerKey = 'VwVkU0YJzsToO15DB7CYexy3';
@@ -97,22 +98,21 @@ export class HomeforUserComponent implements OnInit {
     uploadfile(url :string , doc :any)
   {
 
- this.http.get('https://localhost:44339/api/UserFile/UploadFilesByLink?filepath='+url+'id='+this.user.data.id+'+&filename='+doc.name).
+ this.http.get('https://localhost:44339/api/UserFile/UploadFilesByLink?filepath='+url+'&id='+this.cookie.get('id')+'+&filename='+doc.name).
  subscribe(res => {
-
+  this.load();
  });
 
   }
 
 
 
-  user!:resonpnse;
   
   userfile! : UserFileModel [] ;
 
    static obj:HomeforUserComponent ;
 
-  constructor(private router:Router,private http:HttpClient) 
+  constructor(private router:Router,private http:HttpClient,private cookie:CookieService) 
   {
     this.user = <resonpnse>this.router.getCurrentNavigation()?.extras.state
     HomeforUserComponent.obj=this;
@@ -124,22 +124,65 @@ export class HomeforUserComponent implements OnInit {
 
   onClickMe(u:UserFileModel) 
   {
-this.http.get('https://localhost:44339/api/UserFile/SendFile?id='+u.id).subscribe(res=>
+
+      this.http.get('https://localhost:44339/api/UserFile/SendFile?uid='+this.cookie.get('id')+ '&fid='+u.id).subscribe(res=>
 {
+  var ad  =<resonpnse>res;
+  this.message=ad.msg;
+  if(ad.sucess)
+  {
+  // this.router.navigateByUrl('/home');
+  }
+  else
+  {
+    this.router.navigateByUrl('/');
+  }
   u.status="Send";
   console.log(res);
 });
     
+     // this.router.navigateByUrl('/');
+    
   }
   ngOnInit(): void {
-  
-    this.http.get('https://localhost:44339/api/UserFile/getFileByUserId?Id='+ this.user.data.id ).subscribe(
-      res=> 
-      {
-        this.userfile=<UserFileModel[]>res;
+   
+       this.load();   
+  }
+
+ load() :void {
+  {
+
+    if(this.cookie.get('id') == "")
+    {
+      this.router.navigateByUrl('/');
     }
-    )
+
+    this.http.get('https://localhost:44339/api/UserFile/getFileByUserId?Id='+ this.cookie.get('id') ).subscribe(
+    res=> 
+    {
+      var ad  =<resonpnse>res;
+      this.message=ad.msg;
+       if(ad.sucess)
+       {
+        this.userfile=ad.data;
+       }
+       else
+       {
+         this.router.navigateByUrl('/');
+       }
+     
+   }
+  )
   }
 
 }
 
+}
+
+export interface resonpnse
+  {
+    data: UserFileModel[],
+    msg: string
+    sucess:boolean
+   
+  }

@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { CookieService } from 'ngx-cookie-service';
 import { loginModel } from '../model/loginModel';
 import { UserModel } from '../model/UserModel';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 
 @Component({
@@ -14,22 +16,37 @@ import { UserModel } from '../model/UserModel';
 export class LoginComponent  {
   model!: loginModel;
    dat:any;
+   
+   message:any;
 
-  constructor(private http:HttpClient,private router: Router){}
+  constructor(private http:HttpClient,private router: Router,private cookie:CookieService)
+  {}
    currentval="";
-
+     cook:any;
    Handle(res :any)
    {
    
-        
-      var u = <resonpnse>res;
+      
 
+      var u = <resonpnse>res;
+      this.message=u.msg;
       if (u.data === null)
   {
        console.log(u.msg);
+       this.cookie.set('id',"");
+  } 
+  else if(u.role== "1")
+  {
+    this.cook=u.data.id;
+    console.log(u.msg);
+    this.router.navigateByUrl('/home', { state: u });
+    this.cookie.set('id',u.data.id);
+
   }
-  else{
-      this.router.navigateByUrl('/home', { state: u });
+  else if(u.role =="2")
+  {
+      this.router.navigateByUrl('/dashboard', { state: u });
+      this.cookie.set('id',u.data.id);
   }
    
     
@@ -38,11 +55,7 @@ export class LoginComponent  {
 
    onClickMe(val:string , val2:string) {
   
-    if(val=="admin"&&val2=="admin")
-    {
-      this.router.navigateByUrl('/dashboard');
-    }
-    else{
+  
 
     
     this.model = { username:val , password : val2};
@@ -55,7 +68,7 @@ export class LoginComponent  {
     // console.log(this.model.username);
         
     });
-  }
+  
      
   }
 
@@ -75,4 +88,6 @@ export interface resonpnse
   {
     data: UserModel,
     msg: string
+    role:string
+   
   }

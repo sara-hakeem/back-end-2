@@ -1,16 +1,17 @@
 <div class="login">
     <div class="heading">
-      <h2>log in in</h2>
+      <h2>log in </h2>
       
   
         <div class="input-group input-group-lg">
           <span class="input-group-addon"><i class="fa fa-user"></i></span>
-          <input #boxx type="text" #box class="form-control" placeholder="Username or email">
-            </div>
+          <input  type="text" #box  required class="form-control" placeholder="Username or email">
+          
+             </div>
   
           <div class="input-group input-group-lg">
             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-            <input type="password" #box1 class="form-control" placeholder="Password">
+            <input  required type="password" #boxx class="form-control" placeholder="Password">
           </div>
   
           <br>   <br>   <br>   <br>
@@ -19,6 +20,8 @@
           <br>  
           <button style="padding: 20px 50px; background-color: teal; color: white;" routerLink="/register"> sign in</button>
 
-        
+         <br><br>
+          <label>{{message}}</label>
            </div>
-   </div>
+   </div>     
+   

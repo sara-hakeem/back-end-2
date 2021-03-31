@@ -13,7 +13,7 @@
             <td>{{item.fileName}}</td>
             <td>{{item.filePath}}</td>
             <td>{{item.status}}</td>
-            <td><button (click)="onClickMe(item)" class="uk-button uk-button-default" type="button">Button</button></td>
+            <td><button (click)="onClickMe(item)" class="uk-button uk-button-default" type="button">Send to Admin</button></td>
        
             
            
@@ -22,5 +22,8 @@
 </table>
 <input type="file" (change)="onFileSelected($event)">
 <button class="uk-button uk-button-default"(click)="loadGoogleDrive()" type="button"> G-Drive</button>
+<br><br>
+<label>{{message}}</label>
+
 
            
